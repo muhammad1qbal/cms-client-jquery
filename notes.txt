@@ -1,0 +1,2 @@
+client id = 575472646971-0jucdsahbrqotd667svh3j77d064boug.apps.googleusercontent.com
+client secret = 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

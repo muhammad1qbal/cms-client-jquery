@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google-signin-client_id" content="575472646971-0jucdsahbrqotd667svh3j77d064boug.apps.googleusercontent.com">
     <title>Dashboard - Hacktiv CMS</title>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
@@ -16,35 +17,78 @@
       <h1>Login</h1>
       <form action="/" id='form-login'>
         <label for="fname">Email</label><br>
-        <input type="text" id="fname" name="email"><br><br>
+        <input type="text" id="email-login" name="email"><br><br>
         <label for="lname">Password</label><br>
-        <input type="text" id="lname" name="password"><br><br>
+        <input type="password" id="password-login" name="password"><br><br>
         <input type="submit" value="Submit"><br><br>
-      </form>
+        <div class="google-signin"></div>
+      </form><br>
     </div>
-    <button class="button-register">Register</button>
+    <button class="button-register badge bg-success" style="width:100px; height: 25px;">Register</button>
+
     <div id='register'>
-      <form action="/" id='form-register'>
+      <form id='form-register'>
         <label for="fname">Username</label><br>
-        <input type="text" id="fname" name="username"><br><br>
+        <input type="text" id="username-register" name="username"><br><br>
         <label for="fname">Email</label><br>
-        <input type="text" id="fname" name="email"><br><br>
+        <input type="text" id="email-register" name="email"><br><br>
         <label for="lname">Password</label><br>
-        <input type="text" id="lname" name="password"><br><br>
+        <input type="text" id="password-register" name="password"><br><br>
         <label for="fname">Phone Number</label><br>
-        <input type="text" id="fname" name="phoneNumber"><br><br>
+        <input type="text" id="phoneNumber-register" name="phoneNumber"><br><br>
         <label for="lname">Address</label><br>
-        <input type="text" id="lname" name="address"><br><br>
+        <input type="text" id="address-register" name="address"><br><br>
         <input type="submit" value="Submit">
       </form>
     </div>
+    <div>
+      <form id='form-add-movie'>
+        <label for="fname">Title</label><br>
+        <input type="text" id="title-add" name="title"><br><br>
+        <label for="lname">Synopsis</label><br>
+        <textarea id="synopsis-add" name="synopsis" rows="4" cols="50"></textarea><br><br>
+        <label for="fname">Trailer Url</label><br>
+        <input type="text" id="trailer-add" name="trailerUrl"><br><br>
+        <label>Image Url</label><br>
+        <input type="text" id="image-add" name="imgUrl"><br><br>
+        <label>Rating</label><br>
+        <input type="number" id="rating-add" name="rating"><br><br>
+        <label>Genre Id</label><br>
+        <input type="number" id="genre-add" name="GenreId"><br><br>
+        <input type="submit" value="Submit" id='add-movie'>
+      </form>
+    </div>
+
+    <div id="form-edit-movie">
+      <h1>edit</h1>
+      <form>
+        <label>Title</label><br>
+        <input type="text" id="title-edit" name="title"><br><br>
+        <label>Synopsis</label><br>
+        <textarea id="synopsis-edit" name="synopsis" rows="4" cols="50"></textarea><br><br>
+        <label>Trailer Url</label><br>
+        <input type="text" id="trailer-edit" name="trailerUrl"><br><br>
+        <label>Image Url</label><br>
+        <input type="text" id="image-edit" name="imgUrl"><br><br>
+        <label>Rating</label><br>
+        <input type="number" id="rating-edit" name="rating"><br><br>
+        <label>Genre Id</label><br>
+        <input type="number" id="genre-edit" name="GenreId"><br><br>
+        <input type="submit" value="Submit" id="edit-movie">
+      </form>
+    </div>
+
+    <div id="detail-movie">
+      <h1>Detail Movie</h1>
+    </div>
+    
     <div id="app">
       <div id="sidebar" class="active">
         <div class="sidebar-wrapper active">
           <div class="sidebar-header">
             <div class="d-flex justify-content-between">
               <div class="logo">
-                <a href="index.html"><h2>Hacktiv CMS</h2></a>
+                <button><h2>Hacktiv CMS</h2></button>
               </div>
               <div class="toggler">
                 <a href="#" class="sidebar-hide d-xl-none d-block"
@@ -58,10 +102,18 @@
               <li class="sidebar-title">Menu</li>
 
               <li class="sidebar-item active">
-                <a href="index.html" class="sidebar-link">
+                <button class="sidebar-link" style="width: 220px;">
                   <i class="bi bi-grid-fill"></i>
                   <span>Entity 1</span>
-                </a>
+                </button>
+              </li>
+              <li class="sidebar-item active">
+                <button class="sidebar-link" style="width: 220px;" id="button-add-movie">
+                  <i class="bi bi-grid-fill"></i>
+                  <div >
+                    <span>Add Movie</span>
+                  </div>
+                </button>
               </li>
             </ul>
           </div>
@@ -172,7 +224,7 @@
                     <li>
                       <hr class="dropdown-divider" />
                     </li>
-                    <div class="logout">
+                    <section class="logout">
                       <li>
                         <a class="dropdown-item" href="#"
                           ><i class="icon-mid bi bi-box-arrow-left me-2"></i>
@@ -180,7 +232,7 @@
                         >
                       </li>
 
-                    </div>
+                    </section>
                   </ul>
                 </div>
               </div>
@@ -201,27 +253,20 @@
             <div class="card">
               <div class="card-header">Entity List</div>
               <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <table class="table table-striped" id="table1" border="1">
                   <thead>
                     <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>City</th>
-                      <th>Status</th>
+                      <th>title</th>
+                      <th>synopsis</th>
+                      <th>trailerUrl</th>
+                      <th>imgUrl</th>
+                      <th>rating</th>
+                      <th>GenreId</th>
+                      <th>UserId</th>
+                      <th colspan="3">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dummy</td>
-                      <td>dummy@dummies.com</td>
-                      <td>076 4820 8838</td>
-                      <td>Jakarta</td>
-                      <td>
-                        <span class="badge bg-success">Active</span>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody class="read-movies"></tbody>
                 </table>
               </div>
             </div>
@@ -230,8 +275,10 @@
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./c1-template/c1-template/assets/sidebar.min.js"></script>
+    <script src="./sidebar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src='./main.js'></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   </body>
 </html>
