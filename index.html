@@ -21,19 +21,21 @@
         <label for="lname">Password</label><br>
         <input type="password" id="password-login" name="password"><br><br>
         <input type="submit" value="Submit"><br><br>
-        <div class="google-signin"></div>
       </form><br>
-    </div>
+      <div class="google-signin">
+      </div>
+    </div><br>
     <button class="button-register badge bg-success" style="width:100px; height: 25px;">Register</button>
 
     <div id='register'>
       <form id='form-register'>
+        <h1>Register</h1>
         <label for="fname">Username</label><br>
         <input type="text" id="username-register" name="username"><br><br>
         <label for="fname">Email</label><br>
         <input type="text" id="email-register" name="email"><br><br>
         <label for="lname">Password</label><br>
-        <input type="text" id="password-register" name="password"><br><br>
+        <input type="password" id="password-register" name="password"><br><br>
         <label for="fname">Phone Number</label><br>
         <input type="text" id="phoneNumber-register" name="phoneNumber"><br><br>
         <label for="lname">Address</label><br>
@@ -43,6 +45,10 @@
     </div>
     <div>
       <form id='form-add-movie'>
+        <div class="logo">
+          <button><h2>Hacktiv CMS</h2></button><br><br><br>
+        </div>
+        <h1>Add Movie</h1>
         <label for="fname">Title</label><br>
         <input type="text" id="title-add" name="title"><br><br>
         <label for="lname">Synopsis</label><br>
@@ -60,6 +66,9 @@
     </div>
 
     <div id="form-edit-movie">
+      <div class="logo">
+        <button><h2>Hacktiv CMS</h2></button><br><br><br>
+      </div>
       <h1>edit</h1>
       <form>
         <label>Title</label><br>
@@ -79,9 +88,9 @@
     </div>
 
     <div id="detail-movie">
-      <h1>Detail Movie</h1>
+
     </div>
-    
+   
     <div id="app">
       <div id="sidebar" class="active">
         <div class="sidebar-wrapper active">
@@ -91,9 +100,9 @@
                 <button><h2>Hacktiv CMS</h2></button>
               </div>
               <div class="toggler">
-                <a href="#" class="sidebar-hide d-xl-none d-block"
+                <button class="sidebar-hide d-xl-none d-block"
                   ><i class="bi bi-x bi-middle"></i
-                ></a>
+                ></button>
               </div>
             </div>
           </div>
@@ -126,9 +135,9 @@
         <header class="mb-3">
           <nav class="navbar navbar-expand navbar-light">
             <div class="container-fluid">
-              <a href="#" class="burger-btn d-block">
+              <button class="burger-btn d-block">
                 <i class="bi bi-justify fs-3"></i>
-              </a>
+              </button>
 
               <button
                 class="navbar-toggler"

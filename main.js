@@ -1,30 +1,36 @@
 const baseUrl = "http://localhost:3000/";
 
 function isNotLogin() {
-  $("#app, #detail-movie").hide();
+  localStorage.clear();
+  $("#app, #detail-movie, #sidebar-2").hide();
+  $("input#email-login").val("");
+
+  $("#password-login").val("");
   $("#form-register, #form-add-movie, #form-register, #form-edit-movie").hide();
-  $("#login").show();
-  
+  $("#login, .button-register").show();
+  $(".google-signin").empty();
   $(".google-signin").append(`
   <div class="g-signin2" data-onsuccess="onSignIn"></div>
   <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script>
     function onSignIn(googleUser) {
-      let profile = googleUser.getBasicProfile();
-      let id_token = googleUser.getAuthResponse().id_token;
-      $.ajax({
-        method:'POST',
-        url: baseUrl + 'users/login-google',
-        data: {
-          token: id_token
-        }
-      })
-      .done(res => {
-        localStorage.setItem('access_token', res.access_token)
+      $('.g-signin2').on('click', (event) => {
+        let profile = googleUser.getBasicProfile();
+        let id_token = googleUser.getAuthResponse().id_token;
+        $.ajax({
+          method:'POST',
+          url: baseUrl + 'users/login-google',
+          data: {
+            token: id_token
+          }
+        })
+        .done(res => {
+  
+        })
+        .fail(err => {
+          console.log(err);
+        })
 
-      })
-      .fail(err => {
-        console.log(err);
       })
     }
   </script>
@@ -32,9 +38,9 @@ function isNotLogin() {
 }
 
 function isLogin() {
-  $("#app, #detail-movie").show();
-  $("#login, #form-register, #form-edit-movie").hide();
-  $(".button-register, #form-add-movie").hide();
+  $("#app").show();
+  $("#login, #form-register, #form-edit-movie, #sidebar-2").hide();
+  $(".button-register, #form-add-movie, #detail-movie").hide();
 
   $.ajax({
     url: baseUrl + "movies",
@@ -70,36 +76,40 @@ function isLogin() {
       });
     })
     .fail((err) => {
-      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
-
+      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
     });
 }
 
 function movieDetail(id) {
   $.ajax({
     url: `${baseUrl}movies/${id}`,
-    method: 'GET',
+    method: "GET",
     headers: {
-      access_token: localStorage.getItem('access_token')
-    }
+      access_token: localStorage.getItem("access_token"),
+    },
   })
-  .done((res) => {
-    console.log(res.data);
-    $("#app, #login").hide();
-    $("#form-register, #form-add-movie, #form-register, #form-edit-movie").hide();
-    $('#detail-movie').append(`
-    <img src="${res.data.imgUrl}" style="width:120px;">
-    <p>title: ${res.data.title}</p>
-    <p>synopsis: ${res.data.synopsis}</p>
-    <p>trailerUrl: ${res.data.trailerUrl}</p>
-    <p>rating: ${res.data.rating}</p>
-    <p>genre: ${res.data.Genre.name}</p>
-    <p>user: ${res.data.User.username}</p>
-    `)
-  })
-  .fail((err) => {
-    swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
-  })
+    .done((res) => {
+      $("#detail-movie").empty();
+      $("#app, #login, #form-register").hide();
+      $("#form-add-movie, #form-register, #form-edit-movie").hide();
+      $("#detail-movie").show();
+      $("#detail-movie").append(`
+      <div  onclick="isLogin()">
+      <button><h2>Hacktiv CMS</h2></button><br><br><br>
+      </div>
+      <h1>Detail Movie</h1>
+      <img src="${res.data.imgUrl}" style="width:120px;">
+      <p>title: ${res.data.title}</p>
+      <p>synopsis: ${res.data.synopsis}</p>
+      <p>trailerUrl: ${res.data.trailerUrl}</p>
+      <p>rating: ${res.data.rating}</p>
+      <p>genre: ${res.data.Genre.name}</p>
+      <p>user: ${res.data.User.username}</p>
+    `);
+    })
+    .fail((err) => {
+      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
+    });
 }
 
 function addMovie(event) {
@@ -130,7 +140,7 @@ function addMovie(event) {
       isLogin();
     })
     .fail((err) => {
-      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
+      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
     });
 }
 
@@ -145,11 +155,11 @@ function movieDelete(id) {
       access_token: localStorage.getItem("access_token"),
     },
   })
-    .done(() => {
+    .done((res) => {
       isLogin();
     })
     .fail((err) => {
-      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
+      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
     });
 }
 
@@ -160,28 +170,29 @@ function movieEditGet(id) {
     headers: {
       access_token: localStorage.getItem("access_token"),
     },
-  }).done((res) => {
-    const title = res.data.title;
-    const synopsis = res.data.synopsis;
-    const trailerUrl = res.data.trailerUrl;
-    const imgUrl = res.data.imgUrl;
-    const rating = res.data.rating;
-    const GenreId = res.data.GenreId;
-    localStorage.setItem("movie_id", res.data.id);
+  })
+    .done((res) => {
+      const title = res.data.title;
+      const synopsis = res.data.synopsis;
+      const trailerUrl = res.data.trailerUrl;
+      const imgUrl = res.data.imgUrl;
+      const rating = res.data.rating;
+      const GenreId = res.data.GenreId;
+      localStorage.setItem("movie_id", res.data.id);
 
-    $("#title-edit").val(`${title}`);
-    $("#synopsis-edit").val(`${synopsis}`);
-    $("#trailer-edit").val(`${trailerUrl}`);
-    $("#image-edit").val(`${imgUrl}`);
-    $("#rating-edit").val(`${rating}`);
-    $("#genre-edit").val(`${GenreId}`);
-    $("#form-edit-movie").show();
-    $("#login, #form-register, #app, #detail-movie").hide();
-    $(".button-register, #form-add-movie").hide();
-  })
-  .fail((err) => {
-    swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
-  })
+      $("#title-edit").val(`${title}`);
+      $("#synopsis-edit").val(`${synopsis}`);
+      $("#trailer-edit").val(`${trailerUrl}`);
+      $("#image-edit").val(`${imgUrl}`);
+      $("#rating-edit").val(`${rating}`);
+      $("#genre-edit").val(`${GenreId}`);
+      $("#form-edit-movie, #sidebar-2").show();
+      $("#login, #form-register, #app, #detail-movie").hide();
+      $(".button-register, #form-add-movie").hide();
+    })
+    .fail((err) => {
+      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
+    });
 }
 
 function movieEditPut(event) {
@@ -192,7 +203,7 @@ function movieEditPut(event) {
   const imgUrl = $("#image-edit").val();
   const rating = $("#rating-edit").val();
   const GenreId = $("#genre-edit").val();
-  const MovieId = localStorage.getItem('movie_id')
+  const MovieId = localStorage.getItem("movie_id");
   $.ajax({
     url: `${baseUrl}movies/${MovieId}/edit`,
     method: "PUT",
@@ -207,16 +218,16 @@ function movieEditPut(event) {
     headers: {
       access_token: localStorage.getItem("access_token"),
     },
-  }).done(() => {
-    event.preventDefault();
-    isLogin()
-    console.log("lk");
   })
-  .fail((err) => {
-    swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
-  })
+    .done(() => {
+      event.preventDefault();
+      localStorage.removeItem("movie_id");
+      isLogin();
+    })
+    .fail((err) => {
+      swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
+    });
 }
-
 
 $(document).ready(() => {
   if (localStorage.getItem("access_token")) {
@@ -226,12 +237,19 @@ $(document).ready(() => {
   }
 
   $(".logo").on("click", (event) => {
+    event.preventDefault()
     isLogin();
   });
 
   $("#button-add-movie").on("click", (event) => {
     event.preventDefault();
-    $("#form-add-movie").show();
+    $("#title-add").val("");
+    $("#synopsis-add").val("");
+    $("#trailer-add").val("");
+    $("#image-add").val("");
+    $("#rating-add").val("");
+    $("#genre-add").val("");
+    $("#form-add-movie, #sidebar-2").show();
     $("#app, #detail-movie").hide();
     $("#login").hide();
     $(".button-register").hide();
@@ -263,7 +281,7 @@ $(document).ready(() => {
         isNotLogin();
       })
       .fail((err) => {
-        swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
+        swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
       });
   });
 
@@ -284,23 +302,20 @@ $(document).ready(() => {
         isLogin();
       })
       .fail((err) => {
-        swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`)
+        swal(`${err.responseJSON.statusCode}`, `${err.responseJSON.message}`);
       });
   });
 
   $(".button-register").on("click", () => {
     $("#form-register").show();
-    $("#login, #detail-movie").hide();
+    $("#login, #detail-movie, #sidebar-2").hide();
     $(".button-register").hide();
   });
 
   $(".logout").on("click", (event) => {
     event.preventDefault();
-    localStorage.clear()
     isNotLogin();
   });
 
   $("#edit-movie").on("click", movieEditPut);
-
-
 });
