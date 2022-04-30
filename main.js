@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3000/";
+const baseUrl = "https://challengep2.herokuapp.com/";
 
 function isNotLogin() {
   localStorage.clear();
@@ -290,7 +290,7 @@ $(document).ready(() => {
     const email = $("input#email-login").val();
     const password = $("#password-login").val();
     $.ajax({
-      url: "http://localhost:3000/users/login",
+      url: `${baseUrl}users/login`,
       method: "POST",
       data: {
         email,
